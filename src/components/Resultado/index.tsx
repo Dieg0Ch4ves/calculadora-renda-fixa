@@ -1,18 +1,27 @@
-interface ResultadoProps {
-  bruto: number;
-  liquido: number;
-  ir: number;
-}
+import { Typography, Stack, Divider } from "@mui/material";
+import type { ResultadoRendimento } from "../../types/ResultadoRendimento";
 
-const Resultado = ({ bruto, liquido, ir }: ResultadoProps) => {
+export default function Resultado({
+  titulo,
+  bruto,
+  liquido,
+  ir,
+}: ResultadoRendimento) {
   return (
-    <div style={{ marginTop: '2rem' }}>
-      <h2>Resultado:</h2>
-      <p>Valor Bruto: R$ {bruto.toFixed(2)}</p>
-      <p>Imposto de Renda: R$ {ir.toFixed(2)}</p>
-      <p>Valor Líquido: R$ {liquido.toFixed(2)}</p>
-    </div>
+    <Stack spacing={1}>
+      <Typography variant="h6" fontWeight={"bold"}>
+        {titulo}
+      </Typography>
+      <Typography color="primary">
+        Bruto: <strong>R$ {bruto.toFixed(2)}</strong>{" "}
+      </Typography>
+      <Typography color="error">
+        IR:<strong> R$ {ir.toFixed(2)}</strong>
+      </Typography>
+      <Typography color="success">
+        Liquido: <strong>R$ {liquido.toFixed(2)}</strong>
+      </Typography>
+      <Divider />
+    </Stack>
   );
-};
-
-export default Resultado;
+}

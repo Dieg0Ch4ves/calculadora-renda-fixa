@@ -19,6 +19,7 @@ const FormDados = ({
         <InputLabel htmlFor="taxa-cdi">CDI (a.a):</InputLabel>
         <OutlinedInput
           id="taxa-cdi"
+          type="number"
           value={taxaCDI}
           onChange={(e) => setTaxaCDI(e.target.value)}
           placeholder="Ex: 100"
@@ -32,6 +33,7 @@ const FormDados = ({
         <InputLabel htmlFor="taxa-selic">SELIC (a.a):</InputLabel>
         <OutlinedInput
           id="taxa-selic"
+          type="number"
           value={taxaSelic}
           onChange={(e) => setTaxaSelic(e.target.value)}
           placeholder="Ex: 100"

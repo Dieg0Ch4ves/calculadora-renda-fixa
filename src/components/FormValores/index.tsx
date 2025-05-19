@@ -88,6 +88,7 @@ const FormularioRendaFixa = ({
         <TextField
           label="Percentual do CDI (%):"
           name="percentual"
+          type="number"
           value={formValores.percentual}
           onChange={handleInputChange}
           placeholder="Ex: 100"
