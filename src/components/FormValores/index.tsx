@@ -13,13 +13,15 @@ interface FormularioProps {
     valor: string;
     periodo: string;
     tipoPeriodo: string;
-    percentual: string;
+    percentualCdi: string;
+    percentualLciLca: string;
   };
   setFormValores: (valores: {
     valor: string;
     periodo: string;
     tipoPeriodo: string;
-    percentual: string;
+    percentualCdi: string;
+    percentualLciLca: string;
   }) => void;
 }
 
@@ -87,9 +89,21 @@ const FormularioRendaFixa = ({
       <FormControl>
         <TextField
           label="Percentual do CDI (%):"
-          name="percentual"
+          name="percentualCdi"
           type="number"
-          value={formValores.percentual}
+          value={formValores.percentualCdi}
+          onChange={handleInputChange}
+          placeholder="Ex: 100"
+          slotProps={{ input: { endAdornment: "%" } }}
+        />
+      </FormControl>
+
+      <FormControl>
+        <TextField
+          label="Percentual da LCI/LCA (%):"
+          name="percentualLciLca"
+          type="number"
+          value={formValores.percentualLciLca}
           onChange={handleInputChange}
           placeholder="Ex: 100"
           slotProps={{ input: { endAdornment: "%" } }}

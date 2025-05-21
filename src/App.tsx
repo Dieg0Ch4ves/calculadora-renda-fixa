@@ -9,17 +9,24 @@ import { calcularRendimentoLiquido } from "./utils/calcularRendimentoLiquido";
 import { calcularRendimentoSelic } from "./utils/calcularRendimentoSelic";
 import { calcularRendimentoPoupanca } from "./utils/calcularRendimentoPoupanca";
 import type { ResultadoRendimento } from "./types/ResultadoRendimento";
+import { calcularRendimentoLCIeLCA } from "./utils/calcularRendimentoLCIeLCA";
+import { calcularRendimentoIPCA } from "./utils/calcularRendimentoIPCA";
 
 function App() {
   const [formValores, setFormValores] = useState({
     valor: "",
     periodo: "",
     tipoPeriodo: "meses",
-    percentual: "100",
+    percentualCdi: "100",
+    percentualLciLca: "100",
   });
 
-  const [taxaCDI, setTaxaCDI] = useState("0.135");
-  const [taxaSelic, setTaxaSelic] = useState("0.135");
+  const [formDados, setFormDados] = useState({
+    taxaCDI: "0.135",
+    taxaSelic: "0.135",
+    ipca: "0.045",
+    prefixada: "0.06",
+  });
 
   const [resultadoCDI, setResultadoCDI] = useState<ResultadoRendimento | null>(
     null
@@ -28,44 +35,78 @@ function App() {
     useState<ResultadoRendimento | null>(null);
   const [resultadoPoupanca, setResultadoPoupanca] =
     useState<ResultadoRendimento | null>(null);
+  const [resultadoLCIeLCA, setResultadoLCIeLCA] =
+    useState<ResultadoRendimento | null>(null);
+  const [resultadoIPCA, setResultadoIPCA] =
+    useState<ResultadoRendimento | null>(null);
 
   const handleCalculos = () => {
     const valor = Number(formValores.valor);
     const periodo = Number(formValores.periodo);
-    const percentual = Number(formValores.percentual);
+    const percentualCdi = Number(formValores.percentualCdi);
+    const percentualLciLca = Number(formValores.percentualLciLca);
     const tipoPeriodo = formValores.tipoPeriodo;
 
     const cdi = calcularRendimentoLiquido(
       valor,
       periodo,
-      percentual,
-      Number(taxaCDI),
+      percentualCdi,
+      Number(formDados.taxaCDI),
       tipoPeriodo
     );
     const selic = calcularRendimentoSelic(
       valor,
       periodo,
       tipoPeriodo,
-      Number(taxaSelic)
+      Number(formDados.taxaSelic)
     );
     const poupanca = calcularRendimentoPoupanca(
       valor,
       periodo,
       tipoPeriodo,
-      Number(taxaSelic)
+      Number(formDados.taxaSelic)
+    );
+
+    const lciLca = calcularRendimentoLCIeLCA(
+      valor,
+      periodo,
+      percentualLciLca,
+      Number(formDados.taxaCDI),
+      tipoPeriodo,
+      "LCI/LCA"
+    );
+
+    const ipcaCalc = calcularRendimentoIPCA(
+      valor,
+      periodo,
+      tipoPeriodo,
+      Number(formDados.ipca),
+      Number(formDados.prefixada)
     );
 
     setResultadoCDI(cdi);
     setResultadoSelic(selic);
     setResultadoPoupanca(poupanca);
+    setResultadoLCIeLCA(lciLca);
+    setResultadoIPCA(ipcaCalc);
   };
 
   useEffect(() => {
-    const { valor, periodo, percentual } = formValores;
-    if (valor && periodo && percentual && taxaCDI && taxaSelic) {
+    const { valor, periodo, percentualCdi, percentualLciLca } = formValores;
+    const { taxaCDI, taxaSelic, ipca, prefixada } = formDados;
+    if (
+      valor &&
+      periodo &&
+      percentualCdi &&
+      percentualLciLca &&
+      taxaCDI &&
+      taxaSelic &&
+      ipca &&
+      prefixada
+    ) {
       handleCalculos();
     }
-  }, [formValores, taxaCDI, taxaSelic]);
+  }, [formValores, formDados]);
 
   return (
     <Stack width={"100%"} alignItems={"center"} spacing={4}>
@@ -89,19 +130,16 @@ function App() {
               formValores={formValores}
               setFormValores={setFormValores}
             />
-            <FormDados
-              taxaCDI={taxaCDI}
-              setTaxaCDI={setTaxaCDI}
-              taxaSelic={taxaSelic}
-              setTaxaSelic={setTaxaSelic}
-            />
+            <FormDados formDados={formDados} setFormDados={setFormDados} />
           </Stack>
         </Stack>
 
         <Stack component={Paper} spacing={2} padding={2}>
           {resultadoCDI && <Resultado {...resultadoCDI} />}
+          {resultadoLCIeLCA && <Resultado {...resultadoLCIeLCA} />}
           {resultadoSelic && <Resultado {...resultadoSelic} />}
           {resultadoPoupanca && <Resultado {...resultadoPoupanca} />}
+          {resultadoIPCA && <Resultado {...resultadoIPCA} />}
         </Stack>
       </Stack>
     </Stack>
