@@ -14,9 +14,16 @@ export function calcularRendimentoIPCA(
   const taxaRealAnual = ipcaAnual + taxaPrefixada;
   const taxaMensal = Math.pow(1 + taxaRealAnual, 1 / 12) - 1;
 
-  const bruto = valor * Math.pow(1 + taxaMensal, meses);
+  const grafico = [];
+  let acumulado = valor;
 
-  // Cálculo do IR baseado no tempo
+  for (let i = 1; i <= meses; i++) {
+    acumulado *= 1 + taxaMensal;
+    grafico.push({ periodo: i, valor: Number(acumulado.toFixed(2)) });
+  }
+
+  const bruto = acumulado;
+
   let aliquotaIR = 0.225;
   if (meses > 6 && meses <= 12) aliquotaIR = 0.2;
   else if (meses > 12 && meses <= 24) aliquotaIR = 0.175;
@@ -31,5 +38,6 @@ export function calcularRendimentoIPCA(
     liquido: Number(liquido.toFixed(2)),
     ir: Number(ir.toFixed(2)),
     titulo: "IPCA + Prefixado",
+    grafico,
   };
 }

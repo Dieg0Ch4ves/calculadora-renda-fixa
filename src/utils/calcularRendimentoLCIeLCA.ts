@@ -15,12 +15,21 @@ export function calcularRendimentoLCIeLCA(
   const taxaAnual = taxaCDIAnual * (percentualCDI / 100);
   const taxaMensal = Math.pow(1 + taxaAnual, 1 / 12) - 1;
 
-  const bruto = valor * Math.pow(1 + taxaMensal, meses);
+  const grafico = [];
+  let acumulado = valor;
+
+  for (let i = 1; i <= meses; i++) {
+    acumulado *= 1 + taxaMensal;
+    grafico.push({ periodo: i, valor: Number(acumulado.toFixed(2)) });
+  }
+
+  const bruto = acumulado;
 
   return {
     bruto: Number(bruto.toFixed(2)),
-    liquido: Number(bruto.toFixed(2)), // Isento de IR
+    liquido: Number(bruto.toFixed(2)),
     ir: 0,
     titulo,
+    grafico,
   };
 }

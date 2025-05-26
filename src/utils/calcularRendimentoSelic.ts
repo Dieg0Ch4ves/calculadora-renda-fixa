@@ -12,8 +12,15 @@ export function calcularRendimentoSelic(
   if (tipoPeriodo === "anos") meses = periodo * 12;
 
   const taxaMensal = Math.pow(1 + taxaSelicAnual, 1 / 12) - 1;
-  const bruto = valor * Math.pow(1 + taxaMensal, meses);
+  const grafico = [];
+  let acumulado = valor;
 
+  for (let i = 1; i <= meses; i++) {
+    acumulado *= 1 + taxaMensal;
+    grafico.push({ periodo: i, valor: Number(acumulado.toFixed(2)) });
+  }
+
+  const bruto = acumulado;
   const ir = calcularImpostoRenda(valor, bruto, meses);
   const liquido = bruto - ir;
 
@@ -22,5 +29,6 @@ export function calcularRendimentoSelic(
     liquido: Number(liquido.toFixed(2)),
     ir: Number(ir.toFixed(2)),
     titulo: "SELIC",
+    grafico,
   };
 }

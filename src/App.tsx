@@ -11,21 +11,29 @@ import { calcularRendimentoPoupanca } from "./utils/calcularRendimentoPoupanca";
 import type { ResultadoRendimento } from "./types/ResultadoRendimento";
 import { calcularRendimentoLCIeLCA } from "./utils/calcularRendimentoLCIeLCA";
 import { calcularRendimentoIPCA } from "./utils/calcularRendimentoIPCA";
+import axios from "axios";
 
 function App() {
+  // STATES
+
   const [formValores, setFormValores] = useState({
     valor: "",
     periodo: "",
     tipoPeriodo: "meses",
     percentualCdi: "100",
-    percentualLciLca: "100",
+    percentualLciLca: "85",
   });
 
-  const [formDados, setFormDados] = useState({
-    taxaCDI: "0.135",
-    taxaSelic: "0.135",
-    ipca: "0.045",
-    prefixada: "0.06",
+  const [formDados, setFormDados] = useState<{
+    taxaCDI: string;
+    taxaSelic: string;
+    ipca: string;
+    prefixada: string;
+  }>({
+    taxaCDI: "13.65",
+    taxaSelic: "13.65",
+    ipca: "4.5  ",
+    prefixada: "6",
   });
 
   const [resultadoCDI, setResultadoCDI] = useState<ResultadoRendimento | null>(
@@ -40,6 +48,32 @@ function App() {
   const [resultadoIPCA, setResultadoIPCA] =
     useState<ResultadoRendimento | null>(null);
 
+  // HANDLERS
+
+  const buscarTaxas = async () => {
+    try {
+      const response = await axios.get("https://brasilapi.com.br/api/taxas/v1");
+      const data = response.data;
+
+      const selicRes = data.find(
+        (taxa: { nome: string }) => taxa.nome === "Selic"
+      );
+      const cdiRes = data.find((taxa: { nome: string }) => taxa.nome === "CDI");
+      const ipcaRes = data.find(
+        (taxa: { nome: string }) => taxa.nome === "IPCA"
+      );
+
+      setFormDados((prev) => ({
+        ...prev,
+        taxaSelic: selicRes?.valor.toFixed(2) ?? prev.taxaSelic,
+        taxaCDI: cdiRes?.valor.toFixed(2) ?? prev.taxaCDI,
+        ipca: ipcaRes?.valor.toFixed(2) ?? prev.ipca,
+      }));
+    } catch (error) {
+      console.error("Erro ao buscar taxas:", error);
+    }
+  };
+
   const handleCalculos = () => {
     const valor = Number(formValores.valor);
     const periodo = Number(formValores.periodo);
@@ -51,27 +85,29 @@ function App() {
       valor,
       periodo,
       percentualCdi,
-      Number(formDados.taxaCDI),
+      Number(formDados.taxaCDI) / 100,
       tipoPeriodo
     );
+
     const selic = calcularRendimentoSelic(
       valor,
       periodo,
       tipoPeriodo,
-      Number(formDados.taxaSelic)
+      Number(formDados.taxaSelic) / 100
     );
+
     const poupanca = calcularRendimentoPoupanca(
       valor,
       periodo,
       tipoPeriodo,
-      Number(formDados.taxaSelic)
+      Number(formDados.taxaSelic) / 100
     );
 
     const lciLca = calcularRendimentoLCIeLCA(
       valor,
       periodo,
       percentualLciLca,
-      Number(formDados.taxaCDI),
+      Number(formDados.taxaCDI) / 100,
       tipoPeriodo,
       "LCI/LCA"
     );
@@ -80,8 +116,8 @@ function App() {
       valor,
       periodo,
       tipoPeriodo,
-      Number(formDados.ipca),
-      Number(formDados.prefixada)
+      Number(formDados.ipca) / 100,
+      Number(formDados.prefixada) / 100
     );
 
     setResultadoCDI(cdi);
@@ -94,6 +130,7 @@ function App() {
   useEffect(() => {
     const { valor, periodo, percentualCdi, percentualLciLca } = formValores;
     const { taxaCDI, taxaSelic, ipca, prefixada } = formDados;
+
     if (
       valor &&
       periodo &&
@@ -107,6 +144,10 @@ function App() {
       handleCalculos();
     }
   }, [formValores, formDados]);
+
+  useEffect(() => {
+    buscarTaxas();
+  }, []);
 
   return (
     <Stack width={"100%"} alignItems={"center"} spacing={4}>

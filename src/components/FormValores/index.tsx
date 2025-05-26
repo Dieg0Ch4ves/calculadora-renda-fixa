@@ -1,12 +1,14 @@
 import {
   FormControl,
+  InputAdornment,
+  MenuItem,
+  Select,
   Stack,
   TextField,
-  InputAdornment,
-  Select,
-  MenuItem,
   type SelectChangeEvent,
 } from "@mui/material";
+import { NumericFormat } from "react-number-format";
+import { moneyDeformatter } from "../../utils/moneyDeFormatter";
 
 interface FormularioProps {
   formValores: {
@@ -31,6 +33,16 @@ const FormularioRendaFixa = ({
 }: FormularioProps) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    if (name === "valor") {
+      const formattedValue = moneyDeformatter(value);
+      setFormValores({
+        ...formValores,
+        [name]: formattedValue.toString(),
+      });
+      return;
+    }
+
     setFormValores({
       ...formValores,
       [name]: value,
@@ -47,13 +59,18 @@ const FormularioRendaFixa = ({
   return (
     <Stack spacing={2} component={"form"}>
       <FormControl>
-        <TextField
-          label="Valor Investido (R$):"
-          type="number"
-          name="valor"
+        <NumericFormat
+          customInput={TextField}
+          label="Valor Investido (R$)"
           value={formValores.valor}
-          onChange={handleInputChange}
-          slotProps={{ input: { startAdornment: "R$" } }}
+          onValueChange={(values) => {
+            const { value } = values;
+            setFormValores({ ...formValores, valor: value });
+          }}
+          thousandSeparator="."
+          decimalSeparator=","
+          prefix="R$ "
+          inputMode="numeric"
         />
       </FormControl>
 
