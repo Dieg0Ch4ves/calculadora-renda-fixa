@@ -175,7 +175,7 @@ function App() {
           </Stack>
         </Stack>
 
-        <Stack component={Paper} spacing={2} padding={2}>
+        <Stack component={Paper} spacing={1} padding={2}>
           {resultadoCDI && <Resultado {...resultadoCDI} />}
           {resultadoLCIeLCA && <Resultado {...resultadoLCIeLCA} />}
           {resultadoSelic && <Resultado {...resultadoSelic} />}
