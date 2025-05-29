@@ -4,41 +4,54 @@ import { calcularRendimentoBruto } from "./calcularRendimentoBruto";
 import { converterParaMeses } from "./converterParaMeses";
 
 export function calcularRendimentoLiquido(
-  valor: number,
+  valorInicial: number,
   periodo: number,
   percentualCDI: number,
   taxaCDIAnual: number,
-  tipoPeriodo: string
+  tipoPeriodo: string,
+  aporteMensal: number = 0
 ): ResultadoRendimento {
   const meses = converterParaMeses(periodo, tipoPeriodo);
 
   const bruto = calcularRendimentoBruto(
-    valor,
+    valorInicial,
     meses,
     percentualCDI,
-    taxaCDIAnual
+    taxaCDIAnual,
+    aporteMensal
   );
-  const imposto = calcularImpostoRenda(valor, bruto, meses);
+
+  // Corrigido: total aportado ao longo do tempo
+  const totalAportado = valorInicial + aporteMensal * meses;
+
+  // Lucro real (base para imposto de renda)
+  const lucro = bruto - totalAportado;
+
+  // IR sobre o lucro
+  const imposto = calcularImpostoRenda(lucro, meses);
+
   const liquido = bruto - imposto;
 
-  const grafico = Array.from({ length: meses }, (_, i) => {
-    const rendimentoParcial =
-      valor *
-      Math.pow(
-        1 + (Math.pow(1 + taxaCDIAnual, 1 / 12) - 1) * (percentualCDI / 100),
-        i + 1
-      );
-    return {
-      periodo: i + 1,
-      valor: Number(rendimentoParcial.toFixed(2)),
-    };
-  });
+  // Monta dados do gráfico
+  const taxaMensal = Math.pow(1 + taxaCDIAnual, 1 / 12) - 1;
+  const taxaMensalAjustada = taxaMensal * (percentualCDI / 100);
+
+  let saldo = valorInicial;
+  const grafico = [];
+
+  for (let i = 1; i <= meses; i++) {
+    saldo *= 1 + taxaMensalAjustada;
+    if (aporteMensal > 0) {
+      saldo += aporteMensal;
+    }
+    grafico.push({ periodo: i, valor: Number(saldo.toFixed(2)) });
+  }
 
   return {
     bruto: Number(bruto.toFixed(2)),
     liquido: Number(liquido.toFixed(2)),
     ir: Number(imposto.toFixed(2)),
-    titulo: "CDI",
+    titulo: "CDB",
     grafico,
   };
 }

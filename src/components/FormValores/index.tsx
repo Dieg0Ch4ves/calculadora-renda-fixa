@@ -8,11 +8,12 @@ import {
   type SelectChangeEvent,
 } from "@mui/material";
 import { NumericFormat } from "react-number-format";
-import { moneyDeformatter } from "../../utils/moneyDeFormatter";
+import { moneyDeformatter } from "../../utils/moneyDeformatter";
 
 interface FormularioProps {
   formValores: {
     valor: string;
+    aporteMensal: string;
     periodo: string;
     tipoPeriodo: string;
     percentualCdi: string;
@@ -20,6 +21,7 @@ interface FormularioProps {
   };
   setFormValores: (valores: {
     valor: string;
+    aporteMensal: string;
     periodo: string;
     tipoPeriodo: string;
     percentualCdi: string;
@@ -66,6 +68,22 @@ const FormularioRendaFixa = ({
           onValueChange={(values) => {
             const { value } = values;
             setFormValores({ ...formValores, valor: value });
+          }}
+          thousandSeparator="."
+          decimalSeparator=","
+          prefix="R$ "
+          inputMode="numeric"
+        />
+      </FormControl>
+
+      <FormControl>
+        <NumericFormat
+          customInput={TextField}
+          label="Aportes Mensais (R$)"
+          value={formValores.aporteMensal}
+          onValueChange={(values) => {
+            const { value } = values;
+            setFormValores({ ...formValores, aporteMensal: value });
           }}
           thousandSeparator="."
           decimalSeparator=","

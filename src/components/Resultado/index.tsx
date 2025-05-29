@@ -20,20 +20,24 @@ export default function Resultado({
   grafico,
 }: ResultadoRendimento) {
   return (
-    <Stack minWidth={800}>
+    <Stack width={"100%"}>
       <Typography variant="h6" padding={0} margin={0} fontWeight="bold">
         {titulo}
       </Typography>
 
-      <Stack direction={"row"} justifyContent={"center"} alignItems={"center"}>
-        <Stack minWidth={200}>
-          <Typography color="primary">
+      <Stack
+        direction={{ lg: "row", sm: "column" }}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
+        <Stack minWidth={150}>
+          <Typography variant="caption" color="primary">
             Bruto: <strong>{moneyFormatter(String(bruto.toFixed(2)))}</strong>
           </Typography>
-          <Typography color="error">
+          <Typography variant="caption" color="error">
             IR: <strong>- {moneyFormatter(String(ir.toFixed(2)))}</strong>
           </Typography>
-          <Typography color="success.main">
+          <Typography variant="caption" color="success.main">
             Líquido:{" "}
             <strong>{moneyFormatter(String(liquido.toFixed(2)))}</strong>
           </Typography>
@@ -41,8 +45,9 @@ export default function Resultado({
 
         {grafico && (
           <ResponsiveContainer
-            height={150}
-            style={{ padding: "20px" }}
+            height={120}
+            minWidth={300}
+            style={{ padding: "10px" }}
             width="100%"
           >
             <LineChart data={grafico}>

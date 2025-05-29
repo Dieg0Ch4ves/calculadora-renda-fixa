@@ -45,9 +45,9 @@ const FormDados = ({ formDados, setFormDados }: FormDadosProps) => {
   };
 
   return (
-    <Stack spacing={2}>
-      <Stack spacing={2} direction={"row"}>
-        <FormControl>
+    <Stack width={"100%"} spacing={2}>
+      <Stack width={"100%"} spacing={2} direction={"row"}>
+        <FormControl fullWidth>
           <InputLabel htmlFor="taxa-cdi">CDI (a.a):</InputLabel>
           <OutlinedInputCustom
             id="taxa-cdi"
@@ -61,7 +61,8 @@ const FormDados = ({ formDados, setFormDados }: FormDadosProps) => {
             inputProps={{ min: 0 }}
           />
         </FormControl>
-        <FormControl>
+
+        <FormControl fullWidth>
           <InputLabel htmlFor="taxa-selic">SELIC (a.a):</InputLabel>
           <OutlinedInputCustom
             id="taxa-selic"
@@ -77,8 +78,8 @@ const FormDados = ({ formDados, setFormDados }: FormDadosProps) => {
         </FormControl>
       </Stack>
 
-      <Stack spacing={2} direction={"row"}>
-        <FormControl>
+      <Stack width={"100%"} spacing={2} direction={"row"}>
+        <FormControl fullWidth>
           <InputLabel htmlFor="taxa-selic">IPCA anual (%):</InputLabel>
           <OutlinedInputCustom
             id="taxa-ipca"
@@ -93,7 +94,7 @@ const FormDados = ({ formDados, setFormDados }: FormDadosProps) => {
           />
         </FormControl>
 
-        <FormControl>
+        <FormControl fullWidth>
           <InputLabel htmlFor="taxa-prefixada">Taxa Prefixada:</InputLabel>
           <OutlinedInputCustom
             id="taxa-prefixada"

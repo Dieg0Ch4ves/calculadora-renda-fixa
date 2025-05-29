@@ -1,15 +1,15 @@
 import type { ResultadoRendimento } from "../types/ResultadoRendimento";
 import { calcularImpostoRenda } from "./calcularImpostoRenda";
+import { converterParaMeses } from "./converterParaMeses";
 
 export function calcularRendimentoSelic(
   valor: number,
   periodo: number,
   tipoPeriodo: string,
-  taxaSelicAnual: number
+  taxaSelicAnual: number,
+  aporteMensal: number = 0
 ): ResultadoRendimento {
-  let meses = periodo;
-  if (tipoPeriodo === "dias") meses = periodo / 30;
-  if (tipoPeriodo === "anos") meses = periodo * 12;
+  const meses = converterParaMeses(periodo, tipoPeriodo);
 
   const taxaMensal = Math.pow(1 + taxaSelicAnual, 1 / 12) - 1;
   const grafico = [];
@@ -17,11 +17,14 @@ export function calcularRendimentoSelic(
 
   for (let i = 1; i <= meses; i++) {
     acumulado *= 1 + taxaMensal;
+    acumulado += aporteMensal;
     grafico.push({ periodo: i, valor: Number(acumulado.toFixed(2)) });
   }
 
   const bruto = acumulado;
-  const ir = calcularImpostoRenda(valor, bruto, meses);
+  const totalAportado = valor + aporteMensal * meses;
+  const lucro = bruto - totalAportado;
+  const ir = calcularImpostoRenda(lucro, meses);
   const liquido = bruto - ir;
 
   return {

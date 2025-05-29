@@ -1,4 +1,5 @@
 import type { ResultadoRendimento } from "../types/ResultadoRendimento";
+import { converterParaMeses } from "./converterParaMeses";
 
 export function calcularRendimentoLCIeLCA(
   valor: number,
@@ -6,11 +7,10 @@ export function calcularRendimentoLCIeLCA(
   percentualCDI: number,
   taxaCDIAnual: number,
   tipoPeriodo: string,
-  titulo: "LCI/LCA"
+  titulo: "LCI/LCA",
+  aporteMensal: number = 0
 ): ResultadoRendimento {
-  let meses = periodo;
-  if (tipoPeriodo === "dias") meses = periodo / 30;
-  if (tipoPeriodo === "anos") meses = periodo * 12;
+  const meses = converterParaMeses(periodo, tipoPeriodo);
 
   const taxaAnual = taxaCDIAnual * (percentualCDI / 100);
   const taxaMensal = Math.pow(1 + taxaAnual, 1 / 12) - 1;
@@ -20,6 +20,7 @@ export function calcularRendimentoLCIeLCA(
 
   for (let i = 1; i <= meses; i++) {
     acumulado *= 1 + taxaMensal;
+    acumulado += aporteMensal;
     grafico.push({ periodo: i, valor: Number(acumulado.toFixed(2)) });
   }
 
