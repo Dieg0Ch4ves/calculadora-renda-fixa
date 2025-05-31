@@ -1,5 +1,6 @@
 import { Fade, Paper, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useCallback } from "react";
 
 import FormDados from "./components/FormDados";
 import FormularioRendaFixa from "./components/FormValores";
@@ -82,7 +83,7 @@ function App() {
     }
   };
 
-  const handleCalculos = () => {
+  const handleCalculos = useCallback(() => {
     const valor = Number(formValores.valor);
     const aporteMensal = Number(formValores.aporteMensal);
     const periodo = Number(formValores.periodo);
@@ -139,7 +140,18 @@ function App() {
     setResultadoPoupanca(poupanca);
     setResultadoLCIeLCA(lciLca);
     setResultadoIPCA(ipcaCalc);
-  };
+  }, [
+    formValores.valor,
+    formValores.aporteMensal,
+    formValores.periodo,
+    formValores.percentualCdi,
+    formValores.percentualLciLca,
+    formValores.tipoPeriodo,
+    formDados.taxaCDI,
+    formDados.taxaSelic,
+    formDados.ipca,
+    formDados.prefixada,
+  ]);
 
   useEffect(() => {
     const { valor, periodo, percentualCdi, percentualLciLca } = formValores;
@@ -157,7 +169,7 @@ function App() {
     ) {
       handleCalculos();
     }
-  }, [formValores, formDados]);
+  }, [formValores, formDados, handleCalculos]);
 
   useEffect(() => {
     buscarTaxas();

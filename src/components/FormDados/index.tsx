@@ -34,8 +34,6 @@ const FormDados = ({ formDados, setFormDados }: FormDadosProps) => {
     },
   }));
 
-  console.log("FormDados", formDados);
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormDados({
