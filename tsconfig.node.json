@@ -11,15 +11,22 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "noEmit": true,
+    // "noEmit": true, // REMOVIDO
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    "erasableSyntaxOnly": true, // Nota: "erasableSyntaxOnly" é um nome de opção incomum. A opção correta é "verbatimModuleSyntax". Se "erasableSyntaxOnly" for uma customização ou erro de digitação, pode precisar de revisão. Assumindo que as opções como estão são intencionais, exceto as modificadas.
+    // No entanto, "verbatimModuleSyntax" já está presente e é a opção padrão mais recente para "importsNotUsedAsValues" e "preserveValueImports". "erasableSyntaxOnly" não é uma opção padrão do compilador TypeScript.
+    // Vou manter como está no seu original, mas fica o aviso. Se for um erro, remova-a.
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Configurações para Project References */
+    "composite": true, // ADICIONADO
+    "declaration": true, // ADICIONADO
+    "emitDeclarationOnly": true // ADICIONADO
   },
   "include": ["vite.config.ts"]
 }

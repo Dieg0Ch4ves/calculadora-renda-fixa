@@ -12,16 +12,21 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "noEmit": true,
+    // "noEmit": true, // REMOVIDO
     "jsx": "react-jsx",
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    "erasableSyntaxOnly": true, // Mesma nota do arquivo anterior sobre "erasableSyntaxOnly"
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Configurações para Project References */
+    "composite": true, // ADICIONADO
+    "declaration": true, // ADICIONADO
+    "emitDeclarationOnly": true // ADICIONADO
   },
   "include": ["src"]
 }
