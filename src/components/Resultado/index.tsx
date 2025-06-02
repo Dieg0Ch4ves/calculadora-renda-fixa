@@ -49,6 +49,7 @@ export default function Resultado({
             minWidth={300}
             style={{ padding: "10px" }}
             width="100%"
+            data-testid="grafico-rendimento"
           >
             <LineChart data={grafico}>
               <CartesianGrid strokeDasharray="3 3" />

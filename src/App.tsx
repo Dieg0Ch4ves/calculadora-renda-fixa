@@ -1,12 +1,11 @@
 import { Fade, Paper, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import FormDados from "./components/FormDados";
-import FormularioRendaFixa from "./components/FormValores";
 import Resultado from "./components/Resultado";
 
 import axios from "axios";
+import FormValores from "./components/FormValores";
 import type { ResultadoRendimento } from "./types/ResultadoRendimento";
 import { calcularRendimentoIPCA } from "./utils/calcularRendimentoIPCA";
 import { calcularRendimentoLCIeLCA } from "./utils/calcularRendimentoLCIeLCA";
@@ -196,10 +195,11 @@ function App() {
             spacing={2}
           >
             <Stack direction={"column"} spacing={2} width={"100%"}>
-              <FormularioRendaFixa
+              <FormValores
                 formValores={formValores}
                 setFormValores={setFormValores}
               />
+
               <FormDados formDados={formDados} setFormDados={setFormDados} />
             </Stack>
           </Stack>

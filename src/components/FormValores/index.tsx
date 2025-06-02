@@ -29,10 +29,7 @@ interface FormularioProps {
   }) => void;
 }
 
-const FormularioRendaFixa = ({
-  formValores,
-  setFormValores,
-}: FormularioProps) => {
+const FormValores = ({ formValores, setFormValores }: FormularioProps) => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -148,4 +145,4 @@ const FormularioRendaFixa = ({
   );
 };
 
-export default FormularioRendaFixa;
+export default FormValores;
