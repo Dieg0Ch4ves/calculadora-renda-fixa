@@ -24,7 +24,7 @@ Uma calculadora completa para simular investimentos em produtos de renda fixa co
 1. **Clone o repositório:**
 
    ```bash
-   git clone https://github.com/seu-usuario/calculadora-renda-fixa.git
+   git clone https://github.com/Dieg0Ch4ves/calculadora-renda-fixa.git
    cd calculadora-renda-fixa
    ```
 
